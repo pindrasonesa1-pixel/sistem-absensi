@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Presensi Hub v2.0</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: #f1f5f9;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        /* Container Utama */
+        .glass-container {
+            background: white;
+            border-radius: 3.5rem;
+            box-shadow: 0 40px 100px -20px rgba(79, 70, 229, 0.15);
+            width: 100%;
+            max-width: 460px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* Header sesuai gambar pertama */
+        .header-purple {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            padding: 4rem 2rem;
+            text-align: center;
+            color: white;
+            position: relative;
+            border-radius: 0 0 3.5rem 3.5rem;
+        }
+
+        .header-purple::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 50% 120%, rgba(255,255,255,0.2), transparent);
+            pointer-events: none;
+        }
+
+        .logo-circle {
+            width: 70px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        /* Perbaikan Input Field sesuai feedback */
+        .input-group {
+            margin-bottom: 1.8rem;
+        }
+
+        .label-text {
+            display: block;
+            font-size: 11px;
+            font-weight: 800;
+            color: #94a3b8;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            margin-bottom: 0.75rem;
+            margin-left: 0.5rem;
+        }
+
+        .custom-input-box {
+            display: flex;
+            align-items: center;
+            background: #f8faff; /* Biru sangat muda yang bersih */
+            border: 2px solid transparent;
+            border-radius: 1.5rem; /* Sudut lebih lembut */
+            padding: 0.25rem 0.5rem;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .custom-input-box:focus-within {
+            background: white;
+            border-color: #c7d2fe;
+            box-shadow: 0 15px 30px -10px rgba(99, 102, 241, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .icon-area {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #818cf8;
+            font-size: 1.1rem;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 1rem 0.5rem 1rem 0;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #334155;
+        }
+
+        input::placeholder {
+            color: #cbd5e1;
+            font-weight: 500;
+        }
+
+        /* Tombol Login */
+        .btn-login {
+            width: 100%;
+            background: linear-gradient(90deg, #6366f1, #8b5cf6);
+            color: white;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            padding: 1.25rem;
+            border-radius: 1.5rem;
+            margin-top: 1rem;
+            box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.4);
+            transition: all 0.3s ease;
+            font-size: 0.8rem;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.5);
+            opacity: 0.95;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="glass-container">
+        <div class="header-purple">
+            <div class="logo-circle">
+                <i class="fas fa-fingerprint text-3xl"></i>
+            </div>
+            <h1 class="text-3xl font-black tracking-[0.15em] mb-1">PRESENSIHUB</h1>
+            <p class="text-[10px] font-bold tracking-[0.3em] opacity-80">SISTEM AUTENTIKASI TERPADU</p>
+        </div>
+
+        <div class="p-10 md:p-12">
+            <form id="loginForm">
+                
+                <div class="input-group">
+                    <label class="label-text">Identitas Pengguna</label>
+                    <div class="custom-input-box">
+                        <div class="icon-area">
+                            <i class="fas fa-at"></i>
+                        </div>
+                        <input type="email" id="email" placeholder="pindrasonesa1@gmail.com" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="label-text">Kata Sandi</label>
+                    <div class="custom-input-box">
+                        <div class="icon-area">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <input type="password" id="password" placeholder="••••••••••" required>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label class="label-text">Level Akses</label>
+                    <div class="custom-input-box px-3">
+                        <div class="icon-area">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <select id="role">
+                            <option value="mahasiswa">Mahasiswa (S1/D3)</option>
+                            <option value="dosen">Tenaga Pengajar (Dosen)</option>
+                            <option value="admin">Administrator</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Masuk Sekarang
+                </button>
+            </form>
+
+            <p class="text-center text-slate-400 text-[9px] mt-10 font-bold uppercase tracking-[0.3em]">
+                &copy; 2026 Universitas Indonesia • Versi 2.0.4
+            </p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const btn = this.querySelector('button');
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin mr-2"></i> Memproses...';
+            
+            // Simulasi loading
+            setTimeout(() => {
+                alert('Berhasil Masuk!');
+                btn.innerHTML = 'Masuk Sekarang';
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

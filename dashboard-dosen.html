@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lecturer Pro | Future Presence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: #f0f4f9; }
+        .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.3); }
+        .custom-scroll::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .gradient-text { background: linear-gradient(135deg, #4f46e5 0%, #9333ea 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .btn-primary { background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(79, 70, 229, 0.4); }
+        .live-dot { width: 8px; height: 8px; border-radius: 50%; background: #10b981; box-shadow: 0 0 0 0 rgba(16, 185, 129, 1); animation: pulse-green 2s infinite; }
+        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
+        .freeze-col { position: sticky; left: 0; z-index: 10; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(8px); }
+        .tab-btn { position: relative; transition: all 0.3s; }
+        .tab-btn.active { color: #4f46e5; }
+        .tab-btn.active::after { content: ''; position: absolute; bottom: -2px; left: 0; width: 100%; height: 3px; background: #4f46e5; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-slate-900 overflow-x-hidden">
+
+    <div class="fixed top-0 left-0 w-1 h-full bg-gradient-to-b from-indigo-600 to-purple-600 z-[200]"></div>
+
+    <nav class="sticky top-0 z-[100] glass-card px-6 py-4 mb-6">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white rotate-3 group-hover:rotate-0 transition-transform shadow-lg">
+                    <i class="fas fa-fingerprint text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold tracking-tight text-lg uppercase italic leading-none">Presensi Hub</h1>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Lecturer Edition</span>
+                </div>
+            </div>
+            <div class="flex items-center gap-5">
+                <div class="text-right hidden sm:block">
+                    <p class="text-[9px] font-black text-indigo-500 uppercase">Welcome back,</p>
+                    <p class="text-xs font-extrabold text-slate-700">Dr. Aris Sudarman</p>
+                </div>
+                <div class="relative group">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-500 p-[2px] cursor-pointer">
+                        <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center font-bold text-indigo-600">AS</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main id="mainPanel" class="max-w-7xl mx-auto px-4 md:px-8 space-y-8 pb-12">
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="md:col-span-2 glass-card rounded-[2.5rem] p-8 flex items-center justify-between overflow-hidden relative">
+                <div class="z-10">
+                    <h2 class="text-3xl font-extrabold tracking-tighter text-slate-800 mb-2">Jadwal Perkuliahan <span class="gradient-text">Hari Ini</span></h2>
+                    <p class="text-sm font-medium text-slate-500">Senin, 01 Februari 2026 • Semester Genap</p>
+                </div>
+                <i class="fas fa-calendar-check text-9xl absolute -right-4 -bottom-4 opacity-5 text-indigo-600"></i>
+            </div>
+            <div class="bg-indigo-600 rounded-[2.5rem] p-8 text-white flex flex-col justify-center shadow-2xl shadow-indigo-200">
+                <p class="text-[10px] font-black uppercase tracking-widest opacity-70 mb-1">Total SKS Hari Ini</p>
+                <p class="text-4xl font-extrabold">06 <span class="text-lg font-light opacity-50">SKS</span></p>
+            </div>
+        </section>
+
+        <div class="flex gap-8 border-b border-slate-200 px-2 overflow-x-auto custom-scroll">
+            <button onclick="switchTab('today')" id="tab-today" class="tab-btn active pb-4 font-extrabold text-[11px] uppercase tracking-[0.2em] whitespace-nowrap">Today</button>
+            <button onclick="switchTab('all')" id="tab-all" class="tab-btn pb-4 font-extrabold text-[11px] uppercase tracking-[0.2em] text-slate-400 whitespace-nowrap">All Courses</button>
+            <button onclick="switchTab('upcoming')" id="tab-upcoming" class="tab-btn pb-4 font-extrabold text-[11px] uppercase tracking-[0.2em] text-slate-400 whitespace-nowrap">Upcoming</button>
+        </div>
+
+        <div id="contentSection" class="grid grid-cols-1 gap-5"></div>
+    </main>
+
+    <main id="tampilanLive" class="max-w-7xl mx-auto px-6 hidden pb-12">
+        <div class="flex items-center justify-between mb-8">
+            <button onclick="backToMain()" class="group flex items-center gap-3 text-slate-500 font-bold text-[10px] uppercase tracking-widest hover:text-indigo-600 transition-all">
+                <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center shadow-sm group-hover:-translate-x-1 transition-transform"><i class="fas fa-arrow-left"></i></div>
+                Back to Dashboard
+            </button>
+            <div id="liveBadge" class="hidden flex items-center gap-2 bg-emerald-50 text-emerald-600 px-4 py-2 rounded-full font-black text-[10px] uppercase">
+                <div class="live-dot"></div> Sesi Aktif
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            <div class="lg:col-span-8 space-y-6">
+                <div class="glass-card rounded-[3rem] p-10 shadow-xl shadow-slate-200/50">
+                    <div id="setupView" class="text-center py-10">
+                        <div class="w-20 h-20 bg-indigo-50 text-indigo-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 text-3xl">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <h4 id="liveTitle" class="text-4xl font-extrabold text-slate-800 tracking-tighter uppercase mb-2">---</h4>
+                        <div class="flex justify-center gap-3 mb-10">
+                            <span id="liveClassTag" class="bg-slate-100 text-slate-500 px-3 py-1 rounded-lg font-bold text-[10px] uppercase tracking-widest">---</span>
+                            <span id="liveLoc" class="bg-indigo-50 text-indigo-600 px-3 py-1 rounded-lg font-bold text-[10px] uppercase tracking-widest">---</span>
+                        </div>
+                        <button onclick="startQR()" class="btn-primary text-white font-extrabold px-12 py-5 rounded-2xl uppercase tracking-[0.2em] text-xs">
+                            <i class="fas fa-qrcode mr-3"></i> Generate Access QR
+                        </button>
+                    </div>
+
+                    <div id="activeView" class="hidden flex flex-col md:flex-row items-center gap-12">
+                        <div class="relative p-6 bg-white rounded-[2.5rem] shadow-inner border-2 border-slate-50">
+                            <div id="qrcode"></div>
+                        </div>
+                        <div class="flex-1 w-full space-y-6">
+                            <div class="bg-slate-900 rounded-[2rem] p-8 text-white relative overflow-hidden">
+                                <p class="text-[10px] font-bold uppercase opacity-50 tracking-[0.2em] mb-4">Live Statistics</p>
+                                <div class="flex items-baseline gap-3">
+                                    <span id="presentCount" class="text-7xl font-extrabold italic">0</span>
+                                    <span id="targetTotal" class="text-xl font-medium opacity-30">/ 31</span>
+                                </div>
+                                <div class="w-full bg-white/10 h-3 rounded-full mt-6 overflow-hidden">
+                                    <div id="progressBar" class="bg-gradient-to-r from-emerald-400 to-cyan-400 h-full transition-all duration-1000 shadow-[0_0_15px_rgba(52,211,153,0.5)]" style="width: 0%"></div>
+                                </div>
+                            </div>
+                            <button onclick="stopAttendance()" class="w-full py-5 rounded-2xl border-2 border-red-50 text-red-500 font-extrabold uppercase text-[10px] tracking-[0.2em] hover:bg-red-50 hover:border-red-100 transition-all">
+                                <i class="fas fa-power-off mr-2"></i> End Session
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lg:col-span-4 glass-card rounded-[3rem] p-6 shadow-xl shadow-slate-200/50 flex flex-col h-[600px]">
+                <h5 class="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400 mb-6 px-2 flex justify-between items-center">
+                    Recent Activity <i class="fas fa-bolt text-amber-400"></i>
+                </h5>
+                <div id="liveFeed" class="flex-1 overflow-y-auto custom-scroll space-y-4 px-2">
+                    <div class="text-center py-20 opacity-20">
+                        <i class="fas fa-hourglass-start text-4xl mb-4"></i>
+                        <p class="text-[10px] font-bold uppercase tracking-widest">Waiting for entries...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="tampilanHistory" class="max-w-7xl mx-auto px-6 hidden pb-12">
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+            <div class="flex items-center gap-6">
+                <button onclick="backToMain()" class="w-12 h-12 glass-card rounded-2xl flex items-center justify-center text-slate-400 hover:text-indigo-600 transition-all shadow-sm"><i class="fas fa-arrow-left"></i></button>
+                <div>
+                    <h3 id="histTitle" class="text-3xl font-extrabold text-slate-800 tracking-tighter uppercase leading-none mb-2">---</h3>
+                    <span id="histClassTag" class="text-[10px] font-black bg-indigo-600 text-white px-3 py-1 rounded-md uppercase tracking-widest">---</span>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <div class="glass-card px-6 py-3 rounded-2xl flex items-center gap-3 border-l-4 border-l-emerald-500 shadow-sm">
+                    <p class="text-[9px] font-black text-slate-400 uppercase">Avg Presence</p>
+                    <p class="text-xl font-extrabold text-slate-700">94.2%</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="glass-card rounded-[3rem] shadow-2xl shadow-slate-200/50 overflow-hidden border border-white">
+            <div class="overflow-x-auto custom-scroll">
+                <table class="w-full text-left border-collapse">
+                    <thead class="bg-slate-50/50 text-[10px] text-slate-400 uppercase font-black tracking-[0.1em]">
+                        <tr>
+                            <th class="p-8 freeze-col min-w-[250px]">Student Name</th>
+                            <th class="p-8 text-center min-w-[150px]">NIM</th>
+                            <script>for(let i=1; i<=16; i++) document.write(`<th class="p-4 text-center min-w-[60px]">P${i}</th>`);</script>
+                            <th class="p-8 text-center bg-indigo-50/50 text-indigo-600 sticky right-0 backdrop-blur-md">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody id="matrixTableBody" class="divide-y divide-slate-100 text-[11px] font-semibold"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <div id="modalTunda" class="fixed inset-0 bg-slate-900/40 z-[300] hidden flex items-center justify-center p-4 backdrop-blur-md">
+        <div class="bg-white/90 backdrop-blur-xl w-full max-w-md rounded-[3rem] p-10 shadow-2xl border border-white">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-amber-100 text-amber-600 rounded-[2rem] flex items-center justify-center mx-auto mb-6 rotate-12"><i class="fas fa-clock text-3xl"></i></div>
+                <h3 class="text-2xl font-extrabold text-slate-800 uppercase tracking-tighter">Reschedule</h3>
+                <p id="tundaMkName" class="text-[10px] text-slate-400 font-bold mt-2 uppercase tracking-widest"></p>
+            </div>
+            <div class="space-y-4 mb-8">
+                <div class="relative">
+                    <i class="fas fa-calendar-day absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                    <input type="date" class="w-full pl-12 pr-4 py-4 bg-slate-100 border-none rounded-2xl font-bold text-slate-700 focus:ring-2 ring-indigo-500 outline-none transition-all">
+                </div>
+                <select class="w-full p-4 bg-slate-100 border-none rounded-2xl font-bold text-slate-700 text-sm focus:ring-2 ring-indigo-500 outline-none transition-all appearance-none">
+                    <option>Select Reason...</option>
+                    <option>Official Meeting</option>
+                    <option>Health Issues</option>
+                    <option>Emergencies</option>
+                </select>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <button onclick="closeModal()" class="py-5 bg-slate-200 text-slate-600 font-extrabold rounded-2xl uppercase text-[10px] tracking-widest hover:bg-slate-300 transition-colors">Cancel</button>
+                <button onclick="saveTunda()" class="py-5 btn-primary text-white font-extrabold rounded-2xl uppercase text-[10px] tracking-widest">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const courses = [
+            { id: 1, name: "Pemrograman Web II", class: "IF-22-A", room: "Lab 303", time: "10:30 - 13:00", day: "Senin", cap: 31 },
+            { id: 2, name: "Data Warehouse", class: "IF-22-B", room: "D1.3", time: "14:00 - 16:30", day: "Senin", cap: 31 },
+            { id: 3, name: "Cloud Computing", class: "IF-21-C", room: "D2.1", time: "08:00 - 10:30", day: "Selasa", cap: 31 }
+        ];
+
+        const mhsList = [
+            { nim: "9021182429001", nama: "RIO AGUSTIAWAN" },
+            { nim: "9021182429002", nama: "NAOMIRA FITRI RAMADHANI" },
+            { nim: "9021182429003", nama: "RAIHAN AGASI" },
+            { nim: "9021182429004", nama: "ZAHRA AULIA HASANAH" },
+            { nim: "9021182429005", nama: "PINDRA SONESA" },
+            { nim: "9021182429006", nama: "DESTI WIDIA SARI" },
+            { nim: "9021182429007", nama: "MUHAMMAD KHUSNUL ZAKKY" },
+            { nim: "9021182429008", nama: "IQBAL KURNIAWAN" },
+            { nim: "9021182429009", nama: "AHMAD KURNIA PRISMA" },
+            { nim: "9021182429011", nama: "HANA FORTUNA" },
+            { nim: "9021182429014", nama: "GISTRA RISKY FITRIANSYAH" },
+            { nim: "9021182429015", nama: "ANNISA ERFA AZAHRA" },
+            { nim: "9021182429016", nama: "ISMI BRILIANITA" },
+            { nim: "9021182429017", nama: "BIMA CITRA PRATAMA" },
+            { nim: "9021182429018", nama: "NIKEN TRIFAIZAH" },
+            { nim: "9021182429019", nama: "JULIANA IMAMA" },
+            { nim: "9021182429021", nama: "MUHAMMAD FATHIR AKBAR" },
+            { nim: "9021182429022", nama: "MUHAMMAD AFIF PRATAMA PUTRA" },
+            { nim: "9021182429025", nama: "YUDA PRATAMA" },
+            { nim: "9021182429026", nama: "KHAIRU DZAKI SYAHDANA" },
+            { nim: "9021182429028", nama: "FABIO AIMAR" },
+            { nim: "9021182429029", nama: "PUPU ERIKA" },
+            { nim: "9021182429033", nama: "MUHAMMAD FAIZ" },
+            { nim: "9021182429034", nama: "NABILA AZZAHRA" },
+            { nim: "9021182429035", nama: "DEA SUCINTA MARISA" },
+            { nim: "9021182429036", nama: "MUHAMMAD DANU" },
+            { nim: "9021282429038", nama: "DEZA ARLIAN" },
+            { nim: "9021282429039", nama: "BIMA ARDIANSYAH" },
+            { nim: "9021282429041", nama: "M. RADITTYO KALIN" },
+            { nim: "9021282429042", nama: "ABEEARAFA ARDILIANZ" },
+            { nim: "9021382429138", nama: "NUR AINI FAADHILAH" }
+        ];
+
+        let present = 0;
+        let isSimulating = false;
+
+        function switchTab(tab) {
+            ['today', 'all', 'upcoming'].forEach(t => {
+                document.getElementById(`tab-${t}`).classList.remove('active');
+            });
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            renderContent(tab);
+        }
+
+        function renderContent(tab) {
+            const container = document.getElementById('contentSection');
+            container.innerHTML = "";
+            let filtered = courses;
+            if(tab === 'today') filtered = courses.filter(c => c.day === "Senin");
+            if(tab === 'upcoming') filtered = courses.filter(c => c.day !== "Senin");
+
+            filtered.forEach(mk => {
+                container.innerHTML += `
+                    <div class="glass-card rounded-[2.5rem] p-8 flex flex-wrap justify-between items-center group hover:shadow-xl hover:shadow-indigo-100/50 transition-all duration-500 border-l-8 border-l-transparent hover:border-l-indigo-500">
+                        <div class="flex items-center gap-6">
+                            <div class="w-16 h-16 bg-white rounded-2xl shadow-sm flex items-center justify-center text-indigo-600 text-xl font-black group-hover:scale-110 transition-transform">
+                                <i class="fas fa-layer-group"></i>
+                            </div>
+                            <div>
+                                <div class="flex items-center gap-3 mb-1">
+                                    <h4 class="font-extrabold text-slate-800 uppercase text-lg tracking-tighter">${mk.name}</h4>
+                                    <span class="text-[9px] font-black bg-indigo-50 text-indigo-600 px-2 py-0.5 rounded tracking-widest uppercase">${mk.class}</span>
+                                </div>
+                                <div class="flex gap-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                                    <span><i class="far fa-clock mr-1 text-indigo-400"></i> ${mk.time}</span>
+                                    <span><i class="fas fa-map-marker-alt mr-1 text-indigo-400"></i> ${mk.room}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                            <button onclick="viewHistory('${mk.name}', '${mk.class}')" class="w-12 h-12 flex items-center justify-center bg-slate-100 text-slate-500 rounded-2xl hover:bg-indigo-50 hover:text-indigo-600 transition-all shadow-sm" title="History"><i class="fas fa-history text-sm"></i></button>
+                            <button onclick="openTunda('${mk.name}')" class="px-6 py-3 bg-amber-50 text-amber-600 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-amber-100 transition-colors">Delay</button>
+                            <button onclick="switchToLive('${mk.name}', '${mk.class}', '${mk.room}', ${mk.cap})" class="px-8 py-3 btn-primary text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.15em]">Launch Session</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        function switchToLive(judul, kelas, lokasi, cap) {
+            document.getElementById('mainPanel').classList.add('hidden');
+            document.getElementById('tampilanLive').classList.remove('hidden');
+            document.getElementById('liveTitle').innerText = judul;
+            document.getElementById('liveClassTag').innerText = kelas;
+            document.getElementById('liveLoc').innerText = lokasi;
+            document.getElementById('targetTotal').innerText = "/ " + cap;
+        }
+
+        function startQR() {
+            document.getElementById('setupView').classList.add('hidden');
+            document.getElementById('activeView').classList.remove('hidden');
+            document.getElementById('liveBadge').classList.remove('hidden');
+            document.getElementById('qrcode').innerHTML = "";
+            new QRCode(document.getElementById("qrcode"), { text: "ID-"+Date.now(), width: 220, height: 220, colorDark: "#1e1b4b", correctLevel: QRCode.CorrectLevel.H });
+            isSimulating = true;
+            simulateEntry();
+        }
+
+        function stopAttendance() {
+            if(confirm("Confirm end of session? All data will be synchronized.")) {
+                isSimulating = false;
+                alert("Session Closed. Final count: " + present);
+                backToMain();
+            }
+        }
+
+        function simulateEntry() {
+            if(isSimulating && present < mhsList.length) {
+                const feed = document.getElementById('liveFeed');
+                if(present === 0) feed.innerHTML = "";
+                const entry = document.createElement('div');
+                const mhs = mhsList[present];
+                entry.className = "flex items-center gap-4 p-4 bg-white rounded-2xl shadow-sm border border-slate-50 entry-anim";
+                entry.innerHTML = `
+                    <div class="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-500 text-white rounded-xl flex items-center justify-center font-extrabold text-xs shadow-md shadow-indigo-100">${mhs.nama[0]}</div>
+                    <div class="flex-1">
+                        <div class="text-[11px] font-extrabold text-slate-800 uppercase tracking-tight">${mhs.nama}</div>
+                        <div class="text-[9px] font-bold text-slate-400">${mhs.nim} • ON TIME</div>
+                    </div>
+                    <div class="text-[8px] font-black text-emerald-500 bg-emerald-50 px-2 py-1 rounded-md">VERIFIED</div>
+                `;
+                feed.prepend(entry);
+                present++;
+                document.getElementById('presentCount').innerText = present;
+                document.getElementById('progressBar').style.width = (present/31*100)+'%';
+                setTimeout(simulateEntry, 2500);
+            }
+        }
+
+        function viewHistory(name, kelas) {
+            document.getElementById('mainPanel').classList.add('hidden');
+            document.getElementById('tampilanHistory').classList.remove('hidden');
+            document.getElementById('histTitle').innerText = name;
+            document.getElementById('histClassTag').innerText = kelas;
+            renderMatrix();
+        }
+
+        function backToMain() {
+            document.getElementById('tampilanLive').classList.add('hidden');
+            document.getElementById('tampilanHistory').classList.add('hidden');
+            document.getElementById('setupView').classList.remove('hidden');
+            document.getElementById('activeView').classList.add('hidden');
+            document.getElementById('liveBadge').classList.add('hidden');
+            document.getElementById('mainPanel').classList.remove('hidden');
+            isSimulating = false;
+            present = 0;
+        }
+
+        function renderMatrix() {
+            const body = document.getElementById('matrixTableBody');
+            body.innerHTML = "";
+            mhsList.forEach(mhs => {
+                let row = `<tr class="hover:bg-indigo-50/20 transition-colors">
+                    <td class="p-8 freeze-col font-extrabold text-slate-700 uppercase tracking-tight">${mhs.nama}</td>
+                    <td class="p-8 text-center text-slate-400 font-bold">${mhs.nim}</td>`;
+                for(let i=1; i<=16; i++) {
+                    let color = i > 14 ? "bg-slate-100 opacity-30" : (Math.random() > 0.1 ? "bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.3)]" : "bg-rose-400 shadow-[0_0_10px_rgba(251,113,133,0.3)]");
+                    row += `<td class="p-4 text-center"><div class="p-dot ${color} w-[10px] h-[10px]"></div></td>`;
+                }
+                row += `<td class="p-8 text-center font-black text-indigo-600 bg-indigo-50/30 sticky right-0 backdrop-blur-md">${Math.floor(Math.random()*20+80)}%</td></tr>`;
+                body.innerHTML += row;
+            });
+        }
+
+        function openTunda(name) { document.getElementById('tundaMkName').innerText = name; document.getElementById('modalTunda').classList.remove('hidden'); }
+        function closeModal() { document.getElementById('modalTunda').classList.add('hidden'); }
+        function saveTunda() { alert('Reschedule synchronized successfully!'); closeModal(); }
+
+        window.onload = () => switchTab('today');
+    </script>
+</body>
+</html>
